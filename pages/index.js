@@ -32,7 +32,9 @@ export default function Home() {
           <a>Products</a>
         </Link>
         <button onClick={handleClick}>Place Order</button>
-
+        <Link href="/posts">
+          <a>Posts</a>
+        </Link>
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h2>Documentation &rarr;</h2>
