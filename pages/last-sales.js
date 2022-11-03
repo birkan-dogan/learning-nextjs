@@ -3,8 +3,8 @@ import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const LastSalesPage = () => {
-  const [sales, setSales] = useState();
+const LastSalesPage = (props) => {
+  const [sales, setSales] = useState(props.sales);
   //   const [isLoading, setIsLoading] = useState(false);
 
   const { data, error } = useSWR(
@@ -55,7 +55,7 @@ const LastSalesPage = () => {
     return <p>Failed to load.</p>;
   }
 
-  if (!data) {
+  if (!data && !sales) {
     return <p>Loading...</p>;
   }
   return (
@@ -83,5 +83,32 @@ So, in such a scenario, probably makes sense to fetch that data on the client, s
 why we are using useSWR hook?
 
 useSWR gives us a couple of nice built-in features like catching and automatic revalidation, retries on error and we don't have to write all that code on our own, instead we can use this hook in a much simpler way.
+
+*/
+
+export const getStaticProps = async () => {
+  const response = await fetch(
+    "https://nextjs-3e09f-default-rtdb.firebaseio.com/sales.json"
+  );
+  const data = await response.json();
+  const transformedSales = [];
+
+  for (const key in data) {
+    transformedSales.push({
+      id: key,
+      username: data[key].username,
+      volume: data[key].volume,
+    });
+  }
+
+  return {
+    props: { sales: transformedSales },
+  };
+};
+
+/*
+Combining pre-rendering with client-site data fetching can sometimes lead to the best possible user experience, because we have some data right from the start and we then update it from inside the browser
+
+if data is changed in database, the page source will not be changed and we will see changed data on the screen thanks to client-side data-fetching by useSWR hook in this situation. (Also, we don't need to reload the page, useSWR will automatically re-fetch data)
 
 */
