@@ -7,6 +7,17 @@ const Form = () => {
     e.preventDefault();
     const enteredEmail = emailInputRef.current.value;
     const enteredFeedback = feedbackInputRef.current.value;
+
+    const reqBody = { email: enteredEmail, text: enteredFeedback };
+
+    fetch("api/feedback", {
+      method: "POST",
+      body: JSON.stringify(reqBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // the object inside the headers is for adding metadata to this request which we are sending to inform the backend that this request will carry json data. That's required for the api routes feature for Next.js to correctly parse the incoming request body, and convert json to JavaScript for us so we can access it in the backend
+    }).then((response) => response.json());
   };
   return (
     <form onSubmit={submitFormHandler}>
