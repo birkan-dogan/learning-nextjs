@@ -1,10 +1,13 @@
 import fs from "fs";
 import path from "path";
 
-const buildFeedbackPath = () =>
-  path.join(process.cwd(), "data", "feedback.json");
+export const buildFeedbackPath = () => {
+  return path.join(process.cwd(), "data", "feedback.json");
+};
 
-const extractFeedback = (filePath) => {
+// exporting these 2 functions to use outside of this file in getStaticProps function
+
+export const extractFeedback = (filePath) => {
   const fileData = fs.readFileSync(filePath);
   const data = JSON.parse(fileData);
   return data;
